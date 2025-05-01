@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Code Review Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="sidebar.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+            margin-left: 60px; /* Add margin to account for sidebar */
+        }
+        .code-section {
+            flex: 1.5;
+            display: flex;
+            flex-direction: column;
+            background-color: #1e1e1e;
+            overflow: hidden;
+            max-width: 60%;
+        }
+        .editor-header {
+            background-color: #252526;
+            padding: 8px 15px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+        }
+        .file-tab {
+            padding: 6px 12px;
+            background-color: #2d2d2d;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #ccc;
+        }
+        .editor-content {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+            padding: 0;
+        }
+        .line-numbers {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            background-color: #252526;
+            color: #858585;
+            text-align: right;
+            padding: 10px 5px;
+            font-family: 'Consolas', monospace;
+            user-select: none;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .code-content {
+            margin-left: 40px;
+            padding: 10px;
+            font-family: 'Consolas', monospace;
+            white-space: pre;
+            word-wrap: break-word;
+            line-height: 1.5;
+            color: #d4d4d4;
+            tab-size: 4;
+            box-sizing: border-box;
+        }
+        .code-line {
+            display: block;
+            min-height: 1.5em;
+            padding-left: 10px;
+            white-space: pre;
+            position: relative;
+            font-family: 'Consolas', monospace;
+            line-height: 1.5;
+        }
+        .removed-line {
+            background-color: rgba(248, 81, 73, 0.1);
+            color: #f85149;
+            border-left: 4px solid #f85149;
+        }
+        .added-line {
+            background-color: rgba(63, 185, 80, 0.1);
+            color: #3fb950;
+            border-left: 4px solid #3fb950;
+        }
+        .review-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 40%;
+        }
+        .instructions {
+            flex: 1;
+            padding: 20px;
+            background-color: #252525;
+            overflow-y: auto;
+        }
+        .input-section {
+            padding: 20px;
+            background-color: #2d2d2d;
+            border-top: 1px solid #404040;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        button:not(.hamburger-menu) {
+            padding: 8px 16px;
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+            border: 1px solid #404040;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        button:not(.hamburger-menu):hover {
+            background-color: #4a4a4a;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+            border-color: #ff00ff;
+            animation: buttonGlow 2s ease-in-out infinite;
+        }
+        @keyframes buttonGlow {
+            0% {
+                box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+                border-color: #ff00ff;
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+                border-color: #00ffff;
+            }
+            100% {
+                box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+                border-color: #ff00ff;
+            }
+        }
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            border: 1px solid #666;
+            border-radius: 4px;
+            background-color: #2d2d2d;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            resize: vertical;
+            min-height: 100px;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #ff00ff;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+        .hint-section {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #2d2d2d;
+            border-radius: 4px;
+            border: 2px solid #404040;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            position: relative;
+        }
+        .hint-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+            border-color: #ff00ff;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+            animation: borderGlow 2s ease-in-out infinite;
+        }
+        .hint-timer {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 12px;
+            color: #cccccc;
+            opacity: 0.7;
+        }
+        @keyframes borderGlow {
+            0% {
+                border-color: #ff00ff;
+                box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+            }
+            50% {
+                border-color: #00ffff;
+                box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            }
+            100% {
+                border-color: #ff00ff;
+                box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+            }
+        }
+        .hint-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .hint-icon {
+            font-size: 20px;
+            color: #ff00ff;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .hint-section.visible .hint-icon {
+            opacity: 1;
+        }
+        .difficulty-section {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #2d2d2d;
+            border-radius: 4px;
+            border: 1px solid #404040;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .difficulty-icon {
+            font-size: 18px;
+            color: #ff00ff;
+        }
+        .difficulty-text {
+            color: #e0e0e0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="code-section">
+            <div class="editor-header">
+                <div class="file-tab">No file loaded</div>
+            </div>
+            <div class="editor-content">
+                <div class="line-numbers"></div>
+                <div class="code-content"></div>
+            </div>
+        </div>
+        <div class="review-section">
+            <div class="instructions" id="instructions-content">
+                <!-- Instructions will be loaded here -->
+                <div class="hint-section" id="hint-section">
+                    <div class="hint-header">
+                        <span class="hint-icon">💡</span>
+                        <h3>Hint</h3>
+                    </div>
+                    <div id="hint-content"></div>
+                </div>
+            </div>
+            <div class="input-section">
+                <div class="controls">
+                    <button id="hint">Show Hint</button>
+                    <button id="next">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="renderer.js"></script>
+</body>
+</html> 

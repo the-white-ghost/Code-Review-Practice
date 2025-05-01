@@ -1,0 +1,38 @@
+{
+  "name": "code-review-practice",
+  "version": "1.0.0",
+  "description": "An application for practicing code reviews with focus on security vulnerabilities",
+  "main": "main.js",
+  "scripts": {
+    "start": "LIBGL_ALWAYS_SOFTWARE=1 electron .",
+    "build": "electron-builder"
+  },
+  "keywords": [
+    "code-review",
+    "security",
+    "education"
+  ],
+  "author": "",
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "@electron/remote": "^2.0.12",
+    "diff": "^8.0.0-beta",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.code.review.practice",
+    "win": {
+      "target": "portable",
+      "icon": "icons/favicon.ico"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "icons/icon.png",
+      "category": "Education"
+    }
+  }
+}

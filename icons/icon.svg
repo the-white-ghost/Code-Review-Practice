@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Dark background with rounded corners -->
+    <rect width="512" height="512" rx="64" fill="#000000"/>
+    
+    <!-- White code box background -->
+    <rect x="64" y="64" width="384" height="384" rx="32" fill="#2D2D2D"/>
+    
+    <!-- Code lines (black) -->
+    <rect x="96" y="96" width="160" height="24" rx="4" fill="#d4d4d4"/>
+    <rect x="96" y="144" width="120" height="24" rx="4" fill="#f85149"/>
+    
+    <!-- Highlighted line (green) -->
+    <rect x="96" y="192" width="320" height="32" rx="4" fill="#4CAF50"/>
+    
+    <!-- More code lines (black) -->
+    <rect x="96" y="248" width="200" height="24" rx="4" fill="#f85149"/>
+    <rect x="96" y="296" width="240" height="24" rx="4" fill="#4CAF50"/>
+    <rect x="96" y="344" width="80" height="24" rx="4" fill="#d4d4d4"/>
+    <rect x="96" y="392" width="160" height="24" rx="4" fill="#d4d4d4"/>
+</svg> 
