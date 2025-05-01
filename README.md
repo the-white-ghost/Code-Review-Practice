@@ -1,4 +1,4 @@
-# ![icon](icons/icon.png) Code Review Practice Application 
+# ![icon](icons/favicon-96x96.png) Code Review Practice Application 
 
 An application for practicing code reviews with a focus on security vulnerabilities.
 
